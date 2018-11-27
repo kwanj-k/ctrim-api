@@ -1,2 +1,2 @@
 # drf_sm
-storemanagerv3
+storemanager-v3
