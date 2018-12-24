@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate,get_user_model
 import urllib.request
 from .models import User
 import re
+from rest_framework_jwt.settings import api_settings
 
 class SignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -33,6 +34,7 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=255)
     username = serializers.CharField(max_length=255,read_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
+    token = serializers.CharField(read_only=True)
 
     def validate(self,data):
         username = data.get('email',None)
@@ -47,7 +49,16 @@ class LoginSerializer(serializers.Serializer):
                 )
             username = user_queryset[0].email
             user = authenticate(username=username, password=password)
+        def get_jwt_token(user):
+            jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+            jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+            payload = jwt_payload_handler(user)
+            return jwt_encode_handler(payload)
+        data['token'] = get_jwt_token(user)
+        token = list(data.values())[2]
         return {
             'email':user.email,
-            'username':user.username
+            'username':user.username,
+            'token':token
         }
