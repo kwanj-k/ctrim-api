@@ -5,7 +5,7 @@ class CustomManager(models.Manager):
     Custom manager so as not to return deleted objects
     """
     def get_queryset(self):
-        return super().get_queryset().filter(deleted=False)
+        return super(CustomManager,self).get_queryset().filter(deleted=False)
 
 class AbstractBase(models.Model):
     """
@@ -18,9 +18,13 @@ class AbstractBase(models.Model):
     deleted = models.BooleanField(default=False,
     help_text="This is to make sure deletes are not actual deletes")
     active = models.BooleanField(default=True)
+    everything = models.Manager()
+    objects = CustomManager()
+
+    def delete(self,*args,**kwargs):
+        self.deleted = True
+        self.save()
 
     class Meta:
         ordering =['-updated_at', '-created_at']
         abstract = True
-
-    objects = CustomManager()

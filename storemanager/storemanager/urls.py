@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('products.urls')),
     path('', include('users.urls')),
+    path('users/login',include('rest_framework.urls')),
 ]
