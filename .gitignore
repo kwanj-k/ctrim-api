@@ -103,4 +103,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-pytest --cov-report term-missing --cov=products
+pytest --cov-report term-missing --cov=products -p no:warnings
