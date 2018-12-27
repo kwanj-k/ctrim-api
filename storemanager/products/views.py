@@ -2,6 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly, IsAuthenticated
 )
+from .permissions import IsOwnerOrReadOnly
 from rest_framework.authentication import TokenAuthentication
 import urllib.request
 from rest_framework.renderers import BrowsableAPIRenderer,JSONRenderer
@@ -23,11 +24,11 @@ class ProductList(generics.ListCreateAPIView):
 
 
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes =(IsAuthenticated,)
+    permission_classes =(IsAuthenticated,IsOwnerOrReadOnly)
     serializer_class = ProductSerializer
     def get_queryset(self):
-        queryset = Product.everything.all()
+        queryset = Product.objects.all()
         if self.request.method == 'PUT':
-            queryset = Product.objects.all()
+            queryset = Product.everything.all()
             return queryset
         return queryset
