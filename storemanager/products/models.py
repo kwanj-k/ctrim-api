@@ -2,7 +2,6 @@ from django.db import models
 from common.models import AbstractBase
 from users.models import User
 from django.conf import settings
-import uuid
 
 class Product(AbstractBase):
     """
