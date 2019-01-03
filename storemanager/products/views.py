@@ -9,6 +9,7 @@ from rest_framework.renderers import BrowsableAPIRenderer,JSONRenderer
 from .models import Product
 from .serializers import ProductSerializer
 import json
+from django.db.models import Q
 
 class ProductList(generics.ListCreateAPIView):
     permission_classes =(IsAuthenticated,)
@@ -26,8 +27,16 @@ class ProductList(generics.ListCreateAPIView):
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes =(IsAuthenticated,IsOwnerOrReadOnly)
     serializer_class = ProductSerializer
+    lookup_field = 'slug'
     def get_queryset(self):
-        queryset = Product.objects.all()
+        slug = self.kwargs.get('slug')
+        if slug:
+            queryset = Product.objects.filter(
+					Q(category__icontains=slug) |
+					Q(category__iexact=slug)
+				)
+        else:
+            queryset = Product.objects.all()
         if self.request.method == 'PUT':
             queryset = Product.everything.all()
             return queryset
