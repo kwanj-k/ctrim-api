@@ -17,4 +17,4 @@ class ProductSerializer(serializers.ModelSerializer):
             'id','name','category','inventory','price','owner',
             'updated_at','created_at','slug','url'
         ]
-        read_only_fields = ('updated_at','created_at')
+        read_only_fields = ('updated_at','created_at','slug')
