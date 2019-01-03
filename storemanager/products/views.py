@@ -32,8 +32,8 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
         slug = self.kwargs.get('slug')
         if slug:
             queryset = Product.objects.filter(
-					Q(category__icontains=slug) |
-					Q(category__iexact=slug)
+					Q(slug__icontains=slug) |
+					Q(slug__iexact=slug)
 				)
         else:
             queryset = Product.objects.all()
