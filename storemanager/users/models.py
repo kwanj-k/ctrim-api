@@ -3,7 +3,7 @@ from django.contrib.auth.base_user import AbstractBaseUser,BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
-
+from django.db.models.signals import post_save
 from common.models import AbstractBase
 
 class MyUserManager(BaseUserManager):
@@ -56,3 +56,14 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     class Meta:
         app_label = 'users'
+
+class UserProfile(AbstractBase):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    bio = models.CharField(default='',max_length=255)
+
+def s_post_save_receiver(sender,instance,*args, **kwargs):
+	if kwargs['created']:
+		instance.user_profile = UserProfile.objects.create(user=instance)
+
+post_save.connect(s_post_save_receiver, sender=User)
+

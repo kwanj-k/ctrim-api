@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate,get_user_model
 import urllib.request
-from .models import User
+from .models import User,UserProfile
 import re
 from rest_framework_jwt.settings import api_settings
 
@@ -62,3 +62,26 @@ class LoginSerializer(serializers.Serializer):
             'username':user.username,
             'token':token
         }
+
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(max_length=128, min_length=8, write_only=True)
+    class Meta:
+        model = User
+        fields = ('email', 'username', 'password')
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        for (key, value) in validated_data.items():
+            setattr(instance, key, value)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+
+        return instance
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = UserProfile
+        fields = ['user','bio']

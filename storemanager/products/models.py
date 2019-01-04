@@ -22,7 +22,7 @@ class Product(AbstractBase):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('details', kwargs={'slug':self.slug})
+        return reverse('details', kwargs={self.name:self.slug})
 
 def s_pre_save_receiver(sender, instance, *args, **kwargs):
 	if not instance.slug:
