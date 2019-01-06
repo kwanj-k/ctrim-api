@@ -10,8 +10,22 @@ from .serializers import (
     SignupSerializer,
     LoginSerializer
 )
-from django.contrib.auth import authenticate, login, get_user_model
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import ProfileSerializer
+from .models import UserProfile
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+
+
+
+class Profile(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ProfileSerializer
+    queryset = UserProfile.objects.all()
+
+
 class SignupAPIView(CreateAPIView):
     permission_classes =(AllowAny,)
     renderer_classes = (BrowsableAPIRenderer,JSONRenderer,)
