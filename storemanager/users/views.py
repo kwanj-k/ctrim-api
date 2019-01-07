@@ -13,10 +13,12 @@ from .serializers import (
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ProfileSerializer
+from .serializers import ProfileSerializer,UserUpdateSerializer
 from .models import UserProfile
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from common.permissions import IsOwnerOrReadOnly
+from django.db.models import Q
 
 
 
@@ -24,6 +26,25 @@ class Profile(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ProfileSerializer
     queryset = UserProfile.objects.all()
+
+class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+    #permission_classes =(IsAuthenticated)
+    serializer_class = ProfileSerializer
+    lookup_field = 'slug'
+    def get_queryset(self):
+        slug = self.kwargs.get('slug')
+        if slug:
+            queryset = UserProfile.objects.filter(
+					Q(slug__icontains=slug) |
+					Q(slug__iexact=slug)
+				)
+        else:
+            queryset = UserProfile.objects.all()
+        if self.request.method == 'PUT':
+            # queryset = UserProfile.everything.all()
+            # return queryset
+            self.serializer_class = UserUpdateSerializer
+        return queryset
 
 
 class SignupAPIView(CreateAPIView):
