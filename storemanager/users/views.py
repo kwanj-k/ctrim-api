@@ -21,6 +21,12 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from common.permissions import IsOwnerOrReadOnly
 from django.db.models import Q
 from rest_framework.generics import GenericAPIView
+from django.core.mail import send_mail
+send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
+
+# import sendgrid
+# import os
+# from sendgrid.helpers.mail import Email,Content,Mail
 
 
 
@@ -55,6 +61,27 @@ class SignupAPIView(CreateAPIView):
     renderer_classes = (BrowsableAPIRenderer,JSONRenderer,)
     serializer_class = SignupSerializer
 
+    def post(self,request):
+        print(request.data['email'])
+        user = request.data
+
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+
+        send_mail(
+            'Email-verification',
+            'Click here to verify your account ',
+            'from@gmail.com',
+            ['sender@gmail.com'],
+            fail_silently=False,
+        )
+        info = """You have succesfully registerd to .., please check your email for a confirmation link"""
+        rv = {"Message": info}
+        return Response(rv, status=status.HTTP_201_CREATED)
+
+
 
 class Login(GenericAPIView):
     permission_classes = (AllowAny, )
@@ -63,21 +90,6 @@ class Login(GenericAPIView):
 
     def post(self, request):
         user = request.data.get('user', {})
-
-        # Notice here that we do not call `serializer.save()` like we did for
-        # the registration endpoint. This is because we don't actually have
-        # anything to save. Instead, the `validate` method on our serializer
-        # handles everything we need.
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-# class Login(generics.CreateAPIView):
-#     #permission_classes =(AllowAny,)
-#     serializer_class = LoginSerializer
-#     #renderer_classes = (BrowsableAPIRenderer,JSONRenderer,)
-#     def post(self,request):
-#         user = request.data
-#         serializer = self.serializer_class(data=user)
-#         serializer.is_valid(raise_exception=True)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
