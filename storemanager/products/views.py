@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly, IsAuthenticated
 )
-from .permissions import IsOwnerOrReadOnly
+from common.permissions import IsOwnerOrReadOnly
 from rest_framework.authentication import TokenAuthentication
 import urllib.request
 from rest_framework.renderers import BrowsableAPIRenderer,JSONRenderer

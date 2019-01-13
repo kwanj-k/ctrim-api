@@ -1,8 +1,10 @@
 {
-  "name": "drf_sm",
+  "name": "heroku-devops",
+  "description": "",
   "scripts": {
   },
   "env": {
+    "DISABLE_COLLECTSTATIC": "1"
   },
   "formation": {
   },
@@ -11,6 +13,8 @@
   ],
   "stack": "heroku-18",
   "buildpacks": [
-
+    {
+      "url": "heroku/python"
+    }
   ]
 }

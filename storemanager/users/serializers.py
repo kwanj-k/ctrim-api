@@ -4,6 +4,7 @@ import urllib.request
 from .models import User,UserProfile
 import re
 from rest_framework_jwt.settings import api_settings
+from django.contrib.auth.hashers import make_password
 
 class SignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -69,19 +70,55 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('email', 'username', 'password')
 
-    def update(self, instance, validated_data):
+    def update(self, user, validated_data):
         password = validated_data.pop('password', None)
-        for (key, value) in validated_data.items():
-            setattr(instance, key, value)
-        if password is not None:
-            instance.set_password(password)
-        instance.save()
 
-        return instance
+        # Incase update contains  a password
+        if password is not None:
+            password = make_password(password)
+            setattr(user, 'password', password)
+
+        return super(UserSerializer, self).update(user, validated_data)
+
+    
+class UserUpdateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(max_length=128, min_length=8, write_only=True)
+    class Meta:
+        model = User
+        fields = ('email', 'username', 'password')
+
+    def update(self, user, validated_data):
+        password = validated_data.pop('password', None)
+
+        # Incase update contains  a password
+        if password is not None:
+            password = make_password(password)
+            setattr(user, 'password', password)
+
+        return super(UserUpdateSerializer, self).update(user, validated_data)
+
+
+    
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    url = serializers.HyperlinkedIdentityField(read_only=True,
+                            lookup_field='slug',
+                            view_name='details')
     class Meta:
         model = UserProfile
-        fields = ['user','bio']
+        fields = ['user','bio','slug','url','updated_at','created_at']
+        read_only_fields = ('updated_at','created_at','slug')
+
+    
+
+    # def update(self, instance, validated_data):
+    #     password = validated_data.pop('password', None)
+    #     for (key, value) in validated_data.items():
+    #         setattr(instance, key, value)
+    #     if password is not None:
+    #         instance.set_password(password)
+    #     instance.save()
+
+    #     return instance
