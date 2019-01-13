@@ -185,3 +185,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'kwanj-k'
+EMAIL_HOST_PASSWORD = '40842062theG'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+
+
