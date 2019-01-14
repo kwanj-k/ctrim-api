@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'common',
+    'profiles',
     'products.apps.ProductsConfig',
     'users.apps.UsersConfig',
     'django.contrib.admin',
@@ -188,8 +189,8 @@ STATIC_URL = '/static/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'kwanj-k'
-EMAIL_HOST_PASSWORD = '40842062theG'
+EMAIL_HOST_USER = 'theunsullied'
+EMAIL_HOST_PASSWORD = 'theunsullieddevs2019'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 

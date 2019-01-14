@@ -71,10 +71,10 @@ def s_post_save_receiver(sender,instance,*args, **kwargs):
 	if kwargs['created']:
 		instance.user_profile = UserProfile.objects.create(user=instance)
 
-def s_pre_save_receiver(sender, instance, *args, **kwargs):
-	if not instance.slug:
-		instance.slug = unique_slug_generator(instance)
+# def s_pre_save_receiver(sender, instance, *args, **kwargs):
+# 	if not instance.slug:
+# 		instance.slug = unique_slug_generator(instance)
 
-post_save.connect(s_post_save_receiver, sender=User)
-pre_save.connect(s_pre_save_receiver, sender=UserProfile)
+
+#pre_save.connect(s_pre_save_receiver, sender=UserProfile)
 

@@ -22,7 +22,6 @@ from common.permissions import IsOwnerOrReadOnly
 from django.db.models import Q
 from rest_framework.generics import GenericAPIView
 from django.core.mail import send_mail
-send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
 
 # import sendgrid
 # import os
@@ -62,19 +61,15 @@ class SignupAPIView(CreateAPIView):
     serializer_class = SignupSerializer
 
     def post(self,request):
-        print(request.data['email'])
         user = request.data
-
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
-
         send_mail(
             'Email-verification',
             'Click here to verify your account ',
-            'from@gmail.com',
-            ['sender@gmail.com'],
+            'theunsulliedevs@gmail.com',
+            ['mwangikwanj@gmail.com'],
             fail_silently=False,
         )
         info = """You have succesfully registerd to .., please check your email for a confirmation link"""
