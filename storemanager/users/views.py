@@ -10,6 +10,12 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated,AllowAny
 from common.permissions import IsOwnerOrReadOnly
 from rest_framework.generics import GenericAPIView
+from django.core.mail import send_mail
+send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
+
+# import sendgrid
+# import os
+# from sendgrid.helpers.mail import Email,Content,Mail
 
 
 class SignupAPIView(CreateAPIView):
