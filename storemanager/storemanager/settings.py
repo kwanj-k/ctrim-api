@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'common',
+    'profiles',
+    'cloudinary',
     'products.apps.ProductsConfig',
     'users.apps.UsersConfig',
     'django.contrib.admin',
@@ -108,12 +110,14 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler'
 }
 
+
+AUTH_USER_MODEL = 'users.User'
 
 JWT_AUTH = {
     'JWT_ENCODE_HANDLER':
@@ -186,11 +190,10 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'kwanj-k'
-EMAIL_HOST_PASSWORD = '40842062theG'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-
-
+CLOUDINARY = {
+    'cloud_name': os.getenv('CLOUDINARY_NAME'),
+    'api_key': os.getenv('CLOUDINARY_KEY'),
+    'api_secret': os.getenv('CLOUDINARY_SECRET'),
+    'secure': True
+}
+APPEND_SLASH=False 
