@@ -11,6 +11,7 @@ from .serializers import ProductSerializer
 import json
 from django.db.models import Q
 
+
 class ProductList(generics.ListCreateAPIView):
     permission_classes =(IsAuthenticated,)
     serializer_class = ProductSerializer

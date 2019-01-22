@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'common',
+    'profiles',
+    'cloudinary',
     'products.apps.ProductsConfig',
     'users.apps.UsersConfig',
     'django.contrib.admin',
@@ -108,7 +110,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
@@ -116,6 +118,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
+
+AUTH_USER_MODEL = 'users.User'
 
 JWT_AUTH = {
     'JWT_ENCODE_HANDLER':
@@ -187,3 +191,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+CLOUDINARY = {
+    'cloud_name': os.getenv('CLOUDINARY_NAME'),
+    'api_key': os.getenv('CLOUDINARY_KEY'),
+    'api_secret': os.getenv('CLOUDINARY_SECRET'),
+    'secure': True
+}
+APPEND_SLASH=False 
