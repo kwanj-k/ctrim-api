@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'common',
     'profiles',
     'cloudinary',
+    'django_filters',
     'products.apps.ProductsConfig',
     'users.apps.UsersConfig',
     'django.contrib.admin',
