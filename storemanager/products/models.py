@@ -6,24 +6,7 @@ from django.db.models.signals import pre_save
 from common.utils import unique_slug_generator
 from django.urls import reverse
 from django.utils.text import slugify
-
-class Tag(models.Model):
-    tag = models.CharField(max_length=28)
-    slug = models.SlugField(db_index=True, unique=True)
-    objects = models.Manager()
-
-    class Meta:
-        unique_together = ['tag', 'slug']
-        ordering = ['tag']
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.tag)
-        if not Tag.objects.filter(slug=self.slug).first():
-            super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.tag
+from taggit.managers import TaggableManager
 
 class Product(AbstractBase):
     """
@@ -36,10 +19,7 @@ class Product(AbstractBase):
     price = models.IntegerField()
     owner = models.ForeignKey(User,on_delete=models.CASCADE)
     slug = models.SlugField(null=True,blank=True)
-    tags = models.ManyToManyField(
-        Tag,
-        related_name='articles',
-    )
+    tagList = TaggableManager()
 
     def __str__(self):
         return self.name
