@@ -6,18 +6,18 @@ from common.permissions import IsOwnerOrReadOnly
 from rest_framework.authentication import TokenAuthentication
 import urllib.request
 from rest_framework.renderers import BrowsableAPIRenderer,JSONRenderer
-from .models import Product,Tag
-from .serializers import ProductSerializer,TagSerializer
+from .models import Product
+from .serializers import ProductSerializer
 import json
 from django.db.models import Q
 from rest_framework.response import Response
 from django.utils.text import slugify
-# django-filter
-# from django_filters.rest_framework import FilterSet, filters
 from rest_framework.permissions import AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filters
 from rest_framework.filters import SearchFilter, OrderingFilter
+
+
 
 class ProductList(generics.ListCreateAPIView):
     permission_classes =(IsAuthenticated,)
@@ -51,16 +51,6 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
         return queryset
 
 
-class TagsAPIView(generics.ListAPIView):
-    queryset = Tag.objects.all()
-    renderer_names = ('tag', 'tags')
-    serializer_class = TagSerializer
-
-class TagsDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Tag.objects.all()
-    renderer_names = ('tag', 'tags')
-    serializer_class = TagSerializer
-    lookup_field = 'slug'
 
 class ProductFilter(filters.FilterSet):
     tag = filters.CharFilter(field_name='tags__tag', lookup_expr='exact')
