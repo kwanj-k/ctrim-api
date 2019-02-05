@@ -49,7 +49,6 @@ class LoginSerializer(serializers.Serializer):
                 )
             username = user_queryset[0].email
             user = authenticate(username=username, password=password)
-        
         data['token'] = get_jwt_token(user)
         token = list(data.values())[2]
         return {
@@ -57,7 +56,6 @@ class LoginSerializer(serializers.Serializer):
             'username':user.username,
             'token':token
         }
-
 
 class UserSerializer(serializers.ModelSerializer):
     """Handles serialization and deserialization of User objects."""

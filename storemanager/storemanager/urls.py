@@ -15,10 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+import notifications.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('products.urls')),
     path('', include('users.urls')),
     path('auth/', include('rest_framework_social_oauth2.urls')),
+    path('profiles/', include('profiles.urls')),
+    path('users/login',include('rest_framework.urls')),
+    path('inbox/notifications/', include(notifications.urls)),
 ]

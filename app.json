@@ -1,0 +1,20 @@
+{
+  "name": "heroku-devops",
+  "description": "",
+  "scripts": {
+  },
+  "env": {
+    "DISABLE_COLLECTSTATIC": "1"
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "stack": "heroku-18",
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}

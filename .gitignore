@@ -3,7 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 .vscode/
-migrations/
 # C extensions
 *.so
 
@@ -103,4 +102,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-pytest --cov-report term-missing --cov=products
+pytest --cov-report term-missing --cov=products -p no:warnings
