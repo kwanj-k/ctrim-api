@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'social_django',
     'rest_framework_social_oauth2',
+    'django_filters',
+    'taggit',
+    'taggit_serializer',
 
     'django.contrib.admin',
     'django.contrib.auth',
