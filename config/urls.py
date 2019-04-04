@@ -15,10 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_swagger.views import get_swagger_view
+
+# set the title for the API.
+schema_view = get_swagger_view(title="Ctrim API")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('products.urls')),
     path('api/', include('users.urls')),
     path('users/login',include('rest_framework.urls')),
+    path('', schema_view),
 ]
