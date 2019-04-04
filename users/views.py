@@ -1,5 +1,5 @@
 from rest_framework.renderers import BrowsableAPIRenderer,JSONRenderer
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, GenericAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -18,7 +18,7 @@ class RegistrationAPIView(CreateAPIView):
     serializer_class = RegistrationSerializer
 
 
-class Login(CreateAPIView):
+class Login(GenericAPIView):
     permission_classes =(AllowAny,)
     serializer_class = LoginSerializer
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
