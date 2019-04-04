@@ -11,12 +11,14 @@ class AbstractBase(models.Model):
     """
     This contains all common object attributes
     Every model will inherit this class to avoid repetition
-    Its abstract and can't be instatiated
+    Its abstract hence can't be instatiated
     """
     created_at  = models.DateTimeField(auto_now_add=True)
     updated_at  = models.DateTimeField(auto_now=True)
-    deleted = models.BooleanField(default=False,
-    help_text="This is to make sure deletes are not actual deletes")
+    deleted = models.BooleanField(
+        default=False,
+        help_text="This is to make sure deletes are not actual deletes"
+    )
     active = models.BooleanField(default=True)
     everything = models.Manager()
     objects = CustomManager()
