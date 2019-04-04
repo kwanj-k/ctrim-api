@@ -101,11 +101,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql',
+       'NAME': os.getenv('DATABASE_URL')
+   }
 }
+
+DATABASES['default'] = dj_database_url.config()
 
 #Rest config
 
@@ -198,3 +200,16 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR2, 'static'),
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+SWAGGER_SETTINGS = {
+    'SHOW_REQUEST_HEADERS': True,
+    'USE_SESSION_AUTH': False,
+    'DOC_EXPANSION': 'list',
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    }
+}

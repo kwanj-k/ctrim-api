@@ -1,2 +1,2 @@
-# drf_sm
-storemanager-v3
+# ctrim_api
+ctrim_api
