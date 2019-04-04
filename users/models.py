@@ -1,25 +1,23 @@
 from django.db import models
-from django.contrib.auth.base_user import AbstractBaseUser,BaseUserManager
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.hashers import make_password
-from django.conf import settings
-from django.db.models.signals import post_save
-from common.models import AbstractBase
+
 
 class MyUserManager(BaseUserManager):
 
-    def create_user(self,username,email,password=None):
+    def create_user(self, username, email, password=None):
         phash = make_password(password)
         user = self.model(
-            username=username,email=email,password=phash
+            username=username, email=email, password=phash
         )
         user.save()
         return user
 
-    def create_superuser(self,username,email,password):
+    def create_superuser(self, username, email, password):
         phash = make_password(password)
         user = self.model(
-            username=username,email=email,password=phash
+            username=username, email=email, password=phash
         )
         user.active = True
         user.deleted = False
@@ -28,9 +26,10 @@ class MyUserManager(BaseUserManager):
         user.save()
         return user
 
-class User(AbstractBaseUser,PermissionsMixin):
-    username = models.CharField(max_length=25,unique=True)
-    email = models.EmailField(max_length=40,unique=True)
+
+class User(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=25, unique=True)
+    email = models.EmailField(max_length=40, unique=True)
     active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     deleted = models.BooleanField(
@@ -56,14 +55,3 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     class Meta:
         app_label = 'users'
-
-class UserProfile(AbstractBase):
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
-    bio = models.CharField(default='',max_length=255)
-
-def s_post_save_receiver(sender,instance,*args, **kwargs):
-	if kwargs['created']:
-		instance.user_profile = UserProfile.objects.create(user=instance)
-
-post_save.connect(s_post_save_receiver, sender=User)
-

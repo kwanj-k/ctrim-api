@@ -1,4 +1,4 @@
-"""storemanager URL Configuration
+"""ctrim URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -18,7 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('products.urls')),
-    path('', include('users.urls')),
+    path('api/', include('products.urls')),
+    path('api/', include('users.urls')),
     path('users/login',include('rest_framework.urls')),
 ]
