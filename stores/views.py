@@ -34,7 +34,7 @@ class StoreListCreateView(ListCreateAPIView):
                     continue
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
+      
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 

@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import make_password
 from users.models import User
 from common.models import AbstractBase
 
+
 class StaffManager(BaseUserManager):
 
     def create_staff(self, username, email, store_id,password=None):
@@ -18,7 +19,6 @@ class StaffManager(BaseUserManager):
         )
         staff.save()
         return staff
-
 
 class Store(AbstractBase):
     owner = models.ForeignKey(

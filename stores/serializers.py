@@ -5,6 +5,7 @@ from .models import Store, Staff
 from users.serializers import UserSerializer
 from users.models import User
 
+
 class StoreSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
     name = serializers.CharField(required=True)
