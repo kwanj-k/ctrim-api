@@ -6,7 +6,7 @@ from rest_framework import status
 
 from .models import Store, Staff
 from .serializers import StoreSerializer, StaffSerializer
-from common.permissions import IsOwnerOrReadOnly
+
 
 
 class StoreListCreateView(ListCreateAPIView):
@@ -44,7 +44,6 @@ class StaffListCreateView(ListCreateAPIView):
     queryset = Staff.objects.all()
     permission_classes = (
         IsAuthenticated,
-        IsOwnerOrReadOnly,
     )
 
     def create(self, request, slug, *args, **kwargs):

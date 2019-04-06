@@ -9,6 +9,7 @@ from users.models import User
 class StoreSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
     name = serializers.CharField(required=True)
+    pk = serializers.IntegerField()
 
     def get_owner(self, obj):
         return obj.owner.username
@@ -18,6 +19,7 @@ class StoreSerializer(serializers.ModelSerializer):
         fields = (
             'name',
             'owner',
+            'pk'
         )
 
 class StaffSerializer(serializers.ModelSerializer):
