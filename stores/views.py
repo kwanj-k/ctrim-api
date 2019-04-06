@@ -9,6 +9,7 @@ from .serializers import StoreSerializer, StaffSerializer
 from common.permissions import IsOwnerOrReadOnly
 
 
+
 class StoreListCreateView(ListCreateAPIView):
     serializer_class = StoreSerializer
     permission_classes = (IsAuthenticated,)
@@ -44,7 +45,6 @@ class StaffListCreateView(ListCreateAPIView):
     queryset = Staff.objects.all()
     permission_classes = (
         IsAuthenticated,
-        IsOwnerOrReadOnly,
     )
 
     def create(self, request, slug, *args, **kwargs):
