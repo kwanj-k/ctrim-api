@@ -3,6 +3,8 @@ from rest_framework.validators import UniqueValidator
 
 from .models import Store, Staff
 from users.serializers import UserSerializer
+from users.models import User
+
 
 class StoreSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
@@ -19,10 +21,16 @@ class StoreSerializer(serializers.ModelSerializer):
         )
 
 class StaffSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(max_length=128, write_only=True)
 
     class Meta:
         model = Staff
         fields = (
             'username',
             'email',
+            'password',
         )
+
+    def create(self, validated_data):
+        #import pdb; pdb.set_trace()
+        return Staff.objects.create_staff(**validated_data)
