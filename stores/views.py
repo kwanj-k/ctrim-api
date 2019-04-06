@@ -6,12 +6,34 @@ from rest_framework import status
 
 from .models import Store, Staff
 from .serializers import StoreSerializer, StaffSerializer
+from common.permissions import IsOwnerOrReadOnly
 
 
 class StoreListCreateView(ListCreateAPIView):
     serializer_class = StoreSerializer
-    queryset = Store.objects.all()
     permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        user = request.user
+        queryset = Store.objects.filter(
+            owner=user
+        )
+        if len(queryset) < 1:
+            all_stores = Store.objects.all()
+            for i in all_stores:
+                staff = Staff.objects.filter(
+                    store=i.pk
+                ).first()
+                try:
+                    user.username == staff.username
+                    store = staff.store
+                    queryset = Store.objects.filter(
+                        pk=store.pk
+                    )
+                except:
+                    continue
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -20,7 +42,10 @@ class StoreListCreateView(ListCreateAPIView):
 class StaffListCreateView(ListCreateAPIView):
     serializer_class = StaffSerializer
     queryset = Staff.objects.all()
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (
+        IsAuthenticated,
+        IsOwnerOrReadOnly,
+    )
 
     def create(self, request, slug, *args, **kwargs):
         serializer_context = {
@@ -28,6 +53,9 @@ class StaffListCreateView(ListCreateAPIView):
             'store': get_object_or_404(Store, name=self.kwargs["slug"])
         }
         store = Store.objects.filter(name=slug).first()
+        if store.owner.username != request.user.username:
+            message = {"error": "You are not allowed to add staff"}
+            return Response(message, status.HTTP_403_FORBIDDEN)
         data = request.data
         serializer = self.serializer_class(
             data=data, context=serializer_context)
