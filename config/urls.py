@@ -1,4 +1,4 @@
-"""storemanager URL Configuration
+"""ctrim URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -15,10 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_swagger.views import get_swagger_view
+
+# set the title for the API.
+schema_view = get_swagger_view(title="Ctrim API")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('products.urls')),
-    path('', include('users.urls')),
+    path('api/', include('products.urls')),
+    path('api/', include('users.urls')),
+    path('api/', include('stores.urls')),
     path('users/login',include('rest_framework.urls')),
+    path('', schema_view),
 ]
