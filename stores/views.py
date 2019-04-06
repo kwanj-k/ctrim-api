@@ -6,7 +6,6 @@ from rest_framework import status
 
 from .models import Store, Staff
 from .serializers import StoreSerializer, StaffSerializer
-from common.permissions import IsOwnerOrReadOnly
 
 
 
