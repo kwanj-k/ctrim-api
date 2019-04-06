@@ -1,12 +1,11 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import Store
+from .models import Store, Staff
 from users.serializers import UserSerializer
 
 class StoreSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
-    staff = UserSerializer(many=True, read_only=True)
     name = serializers.CharField(required=True)
 
     def get_owner(self, obj):
@@ -17,5 +16,13 @@ class StoreSerializer(serializers.ModelSerializer):
         fields = (
             'name',
             'owner',
-            'staff'
+        )
+
+class StaffSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Staff
+        fields = (
+            'username',
+            'email',
         )

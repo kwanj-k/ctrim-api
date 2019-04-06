@@ -1,7 +1,5 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
+from django.contrib.auth import get_user_model
 
 from users.models import User
 from common.models import AbstractBase
@@ -18,7 +16,14 @@ class Store(AbstractBase):
         blank=False,
         null=False
     )
-    staff = models.ManyToManyField(User)
-
     def __str__(self):
         return self.name
+
+class Staff(User):
+    is_admin = models.BooleanField(default=False)
+    store = models.ForeignKey(
+        Store,
+        related_name='staff',
+        on_delete=models.CASCADE,
+        null=False
+    )
