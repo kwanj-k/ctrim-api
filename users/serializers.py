@@ -94,7 +94,7 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 'A password is required to log in.'
             )
-        user = authenticate(username=email, password=password)
+        user = authenticate(username=email, password=password)       
         if not user:
             user_queryset = User.objects.all().filter(username__iexact=email)
             if not user_queryset:
