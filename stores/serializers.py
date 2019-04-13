@@ -34,5 +34,4 @@ class StaffSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        #import pdb; pdb.set_trace()
         return Staff.objects.create_staff(**validated_data)
