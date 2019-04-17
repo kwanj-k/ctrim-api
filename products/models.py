@@ -3,7 +3,7 @@ from common.models import AbstractBase
 from users.models import User
 from django.conf import settings
 from django.db.models.signals import pre_save
-from .utils import unique_slug_generator
+from common.utils import unique_slug_generator
 from django.urls import reverse
 
 class Product(AbstractBase):

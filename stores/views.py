@@ -1,4 +1,7 @@
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView
+)
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
@@ -6,7 +9,7 @@ from rest_framework import status
 
 from .models import Store, Staff
 from .serializers import StoreSerializer, StaffSerializer
-
+from helpers.store import user_stores
 
 
 class StoreListCreateView(ListCreateAPIView):
@@ -14,29 +17,31 @@ class StoreListCreateView(ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        user = request.user
-        queryset = Store.objects.filter(
-            owner=user
-        )
-        if len(queryset) < 1:
-            all_stores = Store.objects.all()
-            for i in all_stores:
-                staff = Staff.objects.filter(
-                    store=i.pk
-                ).first()
-                try:
-                    user.username == staff.username
-                    store = staff.store
-                    queryset = Store.objects.filter(
-                        pk=store.pk
-                    )
-                except:
-                    continue
+        queryset = user_stores(request)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-      
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+class GetUpdateDestroyStoreView(RetrieveUpdateDestroyAPIView):
+    serializer_class = StoreSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = Store.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        try:
+            store = Store.objects.get(pk=kwargs['pk'])
+        except Store.DoesNotExist:
+            message = 'Store does not exist'
+            return Response(message, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(
+            instance=store,
+            context={'request': request}
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 class StaffListCreateView(ListCreateAPIView):
