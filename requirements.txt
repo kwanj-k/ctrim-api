@@ -24,10 +24,10 @@ pycodestyle==2.5.0
 PyJWT==1.7.1
 python3-openid==3.1.0
 pytz==2018.9
-requests==2.21.0
+urllib3>=1.24.1
+requests>=2.21.0
 requests-oauthlib==1.2.0
 simplejson==3.16.0
 six==1.12.0
 uritemplate==3.0.0
-urllib3>=1.24.1
 whitenoise==4.1.2
