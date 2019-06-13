@@ -12,6 +12,7 @@ def get_jwt_token(user):
     payload = jwt_payload_handler(user)
     return jwt_encode_handler(payload)
 
+
 class RegistrationSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(RegistrationSerializer, self).__init__(*args, **kwargs)
@@ -68,7 +69,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def get_token(self, obj):
         token = get_jwt_token(obj)
         return token
-    
+
     class Meta:
         model = User
         fields = ['email', 'username', 'token', 'password']
@@ -95,7 +96,7 @@ class LoginSerializer(serializers.Serializer):
                 'A password is required to log in.'
             )
 
-        user = authenticate(username=email, password=password)       
+        user = authenticate(username=email, password=password)
         if not user:
             user_queryset = User.objects.all().filter(username__iexact=email)
             if not user_queryset:

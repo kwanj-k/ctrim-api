@@ -5,11 +5,12 @@ from rest_framework.permissions import (
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.authentication import TokenAuthentication
 import urllib.request
-from rest_framework.renderers import BrowsableAPIRenderer,JSONRenderer
+from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from .models import Product
 from .serializers import ProductSerializer
 import json
 from django.db.models import Q
+
 
 class ProductList(generics.ListCreateAPIView):
     permission_classes =(IsAuthenticated,)
@@ -28,6 +29,7 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes =(IsAuthenticated,IsOwnerOrReadOnly)
     serializer_class = ProductSerializer
     lookup_field = 'slug'
+
     def get_queryset(self):
         slug = self.kwargs.get('slug')
         if slug:

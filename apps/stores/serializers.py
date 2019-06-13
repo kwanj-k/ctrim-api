@@ -2,8 +2,8 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from .models import Store, Staff
-from users.serializers import UserSerializer
-from users.models import User
+from apps.users.serializers import UserSerializer
+from apps.users.models import User
 
 
 class StoreSerializer(serializers.ModelSerializer):
@@ -21,6 +21,7 @@ class StoreSerializer(serializers.ModelSerializer):
             'owner',
             'pk'
         )
+
 
 class StaffSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=128, write_only=True)

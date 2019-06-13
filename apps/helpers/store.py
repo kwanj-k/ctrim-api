@@ -2,7 +2,7 @@
 File contains all store related helper
 functions
 """
-from stores.models import Store
+from apps.stores.models import Store
 
 def user_stores(request):
     """
@@ -27,4 +27,3 @@ def user_stores(request):
             except:
                 continue
     return queryset
-
