@@ -9,7 +9,7 @@ from rest_framework import status
 
 from .models import Store, Staff
 from .serializers import StoreSerializer, StaffSerializer
-from helpers.store import user_stores
+from apps.helpers.store import user_stores
 
 
 class StoreListCreateView(ListCreateAPIView):
@@ -41,7 +41,6 @@ class GetUpdateDestroyStoreView(RetrieveUpdateDestroyAPIView):
             context={'request': request}
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 
 class StaffListCreateView(ListCreateAPIView):

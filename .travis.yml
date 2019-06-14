@@ -1,0 +1,32 @@
+language: 'python'
+
+python:
+  - '3.6'
+
+services:
+  - postgresql
+
+addons:
+  postgresql: '9.6'
+  apt:
+    packages:
+      - postgresql-server-dev-9.6
+
+env:
+  - DJANGO_SETTINGS_MODULE="config.settings"
+
+install:
+  - pip install -r requirements.txt
+  - pip install coveralls
+
+before-script:
+  - psql -c 'CREATE DATABASE test;' -U postgres
+  - python manage.py migrate
+
+script:
+  - pytest --cov-report term-missing --cov=apps -p no:warnings
+  - coverage report
+  - coveralls
+
+after-success:
+  - coveralls

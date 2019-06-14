@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import datetime
 import dj_database_url
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR2 = os.path.dirname(os.path.abspath(__file__))
@@ -40,10 +41,10 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
 
     # Local apps
-    'common',
-    'products.apps.ProductsConfig',
-    'users.apps.UsersConfig',
-    'stores.apps.StoresConfig',
+    'apps.common',
+    'apps.products',
+    'apps.users',
+    'apps.stores',
 
 
     'django.contrib.admin',
@@ -97,15 +98,27 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-DATABASES = {
+    
+if os.getenv('DATABASE_URL'):
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DATABASE_URL')
+        }
     }
-}
+    DATABASES['default'] = dj_database_url.config()
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv("DB_NAME"),
+            'USER': os.getenv("DB_USER"),
+            'PASSWORD': os.getenv("DB_PASS"),
+            'HOST': os.getenv("DB_HOST"),
+            'PORT': os.getenv("DB_PORT"),
+        }
+    }
 
-DATABASES['default'] = dj_database_url.config()
 
 # Rest config
 

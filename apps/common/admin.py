@@ -1,8 +1,6 @@
 import os
-from django.contrib import admin
-from django.apps import apps
 from django.db.models.signals import post_migrate
-from users.models import User
+from apps.users.models import User
 
 
 def add_initial_super_admin(sender, **kwargs):

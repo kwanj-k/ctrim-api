@@ -1,15 +1,15 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.contrib.auth.base_user import  BaseUserManager
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 
-from users.models import User
-from common.models import AbstractBase
+from apps.users.models import User
+from apps.common.models import AbstractBase
 
 
 class StaffManager(BaseUserManager):
 
-    def create_staff(self, username, email, store_id,password=None):
+    def create_staff(self, username, email, store_id, password=None):
         phash = make_password(password)
         staff = self.model(
             username=username,
@@ -19,6 +19,7 @@ class StaffManager(BaseUserManager):
         )
         staff.save()
         return staff
+
 
 class Store(AbstractBase):
     owner = models.ForeignKey(
@@ -31,8 +32,10 @@ class Store(AbstractBase):
         blank=False,
         null=False
     )
+
     def __str__(self):
         return self.name
+
 
 class Staff(User):
     is_admin = models.BooleanField(default=False)
@@ -43,4 +46,4 @@ class Staff(User):
         null=False
     )
 
-    objects =  StaffManager()
+    objects = StaffManager()
