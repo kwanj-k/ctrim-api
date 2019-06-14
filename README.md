@@ -1,5 +1,5 @@
 --- 
-[![Build Status](https://travis-ci.com/kwanj-k/ctrim-api.svg?branch=master)](https://travis-ci.com/kwanj-k/ctrim-api) [![Coverage Status](https://coveralls.io/repos/github/kwanj-k/ctrim-api/badge.svg?branch=ch-authentication-tests)](https://coveralls.io/github/kwanj-k/ctrim-api?branch=ch-authentication-tests)
+[![Build Status](https://travis-ci.com/kwanj-k/ctrim-api.svg?branch=master)](https://travis-ci.com/kwanj-k/ctrim-api) [![![Coverage Status](https://coveralls.io/repos/github/kwanj-k/ctrim-api/badge.svg?branch=master)](https://coveralls.io/github/kwanj-k/ctrim-api?branch=master)
 ## Getting started
 These instructions will get you a copy of the project up and running in your local machine for development and testing purposes.
 
