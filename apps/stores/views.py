@@ -21,8 +21,26 @@ class StoreListCreateView(ListCreateAPIView):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    def create(self, request, *args, **kwargs):
+        serializer_context = {
+            'request': request,
+            'owner': request.user
+        }
+        data = request.data
+        serializer = self.serializer_class(
+            data=data, context=serializer_context)
+        stores = Store.objects.all()
+        new_store_name = ''.join(self.request.data['name'].split()).lower()
+        for store in stores:
+            if store.owner == self.request.user:
+                name = ''.join(store.name.split()).lower()
+                if name == new_store_name:
+                    message = 'You have already added that store'
+                    return Response(message, status=status.HTTP_400_BAD_REQUEST)
+                serializer.is_valid(raise_exception=True)
+                serializer.save(owner=self.request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 
 class GetUpdateDestroyStoreView(RetrieveUpdateDestroyAPIView):

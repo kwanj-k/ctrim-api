@@ -8,7 +8,6 @@ from .models import User
 def get_jwt_token(user):
     jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
     jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
-
     payload = jwt_payload_handler(user)
     return jwt_encode_handler(payload)
 
@@ -90,22 +89,19 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 'An email address is required to log in.'
             )
-
         if password is None:
             raise serializers.ValidationError(
                 'A password is required to log in.'
             )
-
         user = authenticate(username=email, password=password)
         if not user:
             user_queryset = User.objects.all().filter(username__iexact=email)
             if not user_queryset:
                 raise serializers.ValidationError(
-                    'User does not exist.'
+                    'Wrong email or password'
                 )
             username = user_queryset[0].email
             user = authenticate(username=username, password=password)
-
         data['token'] = get_jwt_token(user)
         return data
 
