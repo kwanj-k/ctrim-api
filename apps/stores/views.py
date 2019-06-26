@@ -37,9 +37,9 @@ class StoreListCreateView(ListCreateAPIView):
                 if name == new_store_name:
                     message = 'You have already added that store'
                     return Response(message, status=status.HTTP_400_BAD_REQUEST)
-                serializer.is_valid(raise_exception=True)
-                serializer.save(owner=self.request.user)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(owner=self.request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 
