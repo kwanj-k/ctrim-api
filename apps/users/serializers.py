@@ -45,10 +45,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(
             queryset=User.objects.all(),
             message='Email already exists. '
-                    'Please enter another email or sign in'
+                    'Please enter another email or sign in.'
         )],
         error_messages={
-            'invalid': 'Please enter a valid email address'
+            'invalid': 'Please enter a valid email address.'
         }
     )
 
@@ -61,7 +61,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'max_length': 'Password allows a maximum of 128 characters.',
             'min_length': 'Password allows a minimum of 8 characters.',
             'invalid': 'Password must contain at least 1 letter, '
-                       'a number and a special character',
+                       'a number and a special character.',
         })
     token = serializers.SerializerMethodField()
 
@@ -98,7 +98,7 @@ class LoginSerializer(serializers.Serializer):
             user_queryset = User.objects.all().filter(username__iexact=email)
             if not user_queryset:
                 raise serializers.ValidationError(
-                    'Wrong email or password'
+                    'Wrong email or password.'
                 )
             username = user_queryset[0].email
             user = authenticate(username=username, password=password)

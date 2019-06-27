@@ -10,6 +10,6 @@ app_name = 'store'
 
 urlpatterns = [
     path('stores/', StoreListCreateView.as_view()),
-    path('stores/<int:pk>/', GetUpdateDestroyStoreView.as_view()),
+    path('stores/<str:storename>/', GetUpdateDestroyStoreView.as_view()),
     path('<slug>/staff/', StaffListCreateView.as_view()),
 ]
