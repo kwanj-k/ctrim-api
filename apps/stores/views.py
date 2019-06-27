@@ -35,7 +35,7 @@ class StoreListCreateView(ListCreateAPIView):
             if store.owner == self.request.user:
                 name = ''.join(store.name.split()).lower()
                 if name == new_store_name:
-                    message = 'You have already added that store'
+                    message = 'Store already exists.'
                     return Response(message, status=status.HTTP_400_BAD_REQUEST)
         serializer.is_valid(raise_exception=True)
         serializer.save(owner=self.request.user)
@@ -50,7 +50,7 @@ class GetUpdateDestroyStoreView(RetrieveUpdateDestroyAPIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            store = Store.objects.get(pk=kwargs['pk'])
+            store = Store.objects.get(name=kwargs['storename'])
         except Store.DoesNotExist:
             message = 'Store does not exist'
             return Response(message, status=status.HTTP_404_NOT_FOUND)
