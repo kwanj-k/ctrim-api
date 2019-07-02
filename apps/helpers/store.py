@@ -3,6 +3,7 @@ File contains all store related helper
 functions
 """
 from apps.stores.models import Store
+from apps.products.models import Product
 
 def user_stores(request):
     """
@@ -27,3 +28,11 @@ def user_stores(request):
     #         except:
     #             continue
     return queryset
+
+def store_products(storename):
+    store = Store.objects.get(name=storename)
+    queryset = Product.objects.filter(
+        store=store
+    )
+    return queryset
+
