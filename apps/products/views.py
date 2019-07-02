@@ -13,15 +13,16 @@ class ProductList(generics.ListCreateAPIView):
     permission_classes =(IsAuthenticated,)
     serializer_class = ProductSerializer
 
-    def get(self, request, *args, **kwargs):
+    def get_queryset(self):
         try:
-            store = Store.objects.get(name=kwargs['storename'])
+            store = Store.objects.get(name=self.kwargs['storename'])
         except Store.DoesNotExist:
             message = 'Store does not exist'
             return Response(message, status=status.HTTP_404_NOT_FOUND)
-        queryset = store_products(kwargs['storename'])
-        serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        queryset = Product.objects.filter(
+            store=store
+        )
+        return queryset
 
     def create(self, request, *args, **kwargs):
         try:
