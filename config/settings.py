@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.products',
     'apps.users',
     'apps.stores',
+    'apps.stock',
 
 
     'django.contrib.admin',

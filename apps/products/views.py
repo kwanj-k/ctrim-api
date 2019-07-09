@@ -50,21 +50,21 @@ class ProductList(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes =(IsAuthenticated,IsOwnerOrReadOnly)
-    serializer_class = ProductSerializer
-    lookup_field = 'slug'
+# class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+#     permission_classes =(IsAuthenticated,IsOwnerOrReadOnly)
+#     serializer_class = ProductSerializer
+#     lookup_field = 'slug'
 
-    def get_queryset(self):
-        slug = self.kwargs.get('slug')
-        if slug:
-            queryset = Product.objects.filter(
-					Q(slug__icontains=slug) |
-					Q(slug__iexact=slug)
-				)
-        else:
-            queryset = Product.objects.all()
-        if self.request.method == 'PUT':
-            queryset = Product.everything.all()
-            return queryset
-        return queryset
+#     def get_queryset(self):
+#         slug = self.kwargs.get('slug')
+#         if slug:
+#             queryset = Product.objects.filter(
+# 					Q(slug__icontains=slug) |
+# 					Q(slug__iexact=slug)
+# 				)
+#         else:
+#             queryset = Product.objects.all()
+#         if self.request.method == 'PUT':
+#             queryset = Product.everything.all()
+#             return queryset
+#         return queryset

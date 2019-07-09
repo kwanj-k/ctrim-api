@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/', include('apps.products.urls')),
     path('api/', include('apps.users.urls')),
     path('api/', include('apps.stores.urls')),
+    path('api/', include('apps.stock.urls')),
     path('users/login', include('rest_framework.urls')),
     path('', schema_view),
 ]
