@@ -7,18 +7,18 @@ from apps.users.models import User
 from apps.common.models import AbstractBase
 
 
-class StaffManager(BaseUserManager):
+# class StaffManager(BaseUserManager):
 
-    def create_staff(self, username, email, store_id, password=None):
-        phash = make_password(password)
-        staff = self.model(
-            username=username,
-            email=email,
-            store_id=store_id,
-            password=phash
-        )
-        staff.save()
-        return staff
+#     def create_staff(self, username, email, store_id, password=None):
+#         phash = make_password(password)
+#         staff = self.model(
+#             username=username,
+#             email=email,
+#             store_id=store_id,
+#             password=phash
+#         )
+#         staff.save()
+#         return staff
 
 
 class Store(AbstractBase):
@@ -42,13 +42,13 @@ class Store(AbstractBase):
         return self.name
 
 
-class Staff(User):
-    is_admin = models.BooleanField(default=False)
-    store = models.ForeignKey(
-        Store,
-        related_name='staff',
-        on_delete=models.CASCADE,
-        null=False
-    )
+# class Staff(User):
+#     is_admin = models.BooleanField(default=False)
+#     store = models.ForeignKey(
+#         Store,
+#         related_name='staff',
+#         on_delete=models.CASCADE,
+#         null=False
+#     )
 
-    objects = StaffManager()
+#     objects = StaffManager()
