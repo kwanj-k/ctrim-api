@@ -7,7 +7,7 @@ class Product(AbstractBase):
     Product Model
     Defines attributes of a product
     """
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     packaging = models.CharField(max_length=20)
     package_pices = models.IntegerField()
     number_of_packages = models.IntegerField()
