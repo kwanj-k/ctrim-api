@@ -27,13 +27,6 @@ class ProductList(generics.ListCreateAPIView):
         except Store.DoesNotExist:
             message = 'Store does not exist'
             return Response(message, status=status.HTTP_404_NOT_FOUND)
-        serializer_context = {
-            'request': request,
-            'store': store
-        }
-        data = request.data
-        serializer = self.serializer_class(
-            data=data, context=serializer_context)
         products = store_products(kwargs['storename'])
         new_product_name = ''.join(self.request.data['name'].split()).lower()
         for product in products:
@@ -42,6 +35,18 @@ class ProductList(generics.ListCreateAPIView):
                 if name == new_product_name:
                     message = 'Product already exists.'
                     return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        product_worth = 0
+        req_data = self.request.data
+        product_worth += req_data['number_of_packages'] * req_data['package_price']
+        product_worth += req_data['number_of_pieces'] * req_data['piece_price']
+        req_data['product_worth'] = product_worth
+        serializer_context = {
+            'request': request,
+            'store': store
+        }
+        data = req_data
+        serializer = self.serializer_class(
+            data=data, context=serializer_context)
         serializer.is_valid(raise_exception=True)
         serializer.save(store=store)
         return Response(serializer.data, status=status.HTTP_201_CREATED)

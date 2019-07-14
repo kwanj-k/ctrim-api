@@ -14,6 +14,7 @@ class Product(AbstractBase):
     package_price = models.IntegerField()
     piece_price = models.IntegerField()
     number_of_pieces = models.IntegerField()
+    product_worth = models.FloatField()
     store = models.ForeignKey(
         Store,
         on_delete=models.CASCADE,
