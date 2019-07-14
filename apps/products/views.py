@@ -8,20 +8,17 @@ from apps.helpers.store import store_products
 from apps.stores.models import Store
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import get_object_or_404
 
 class ProductList(generics.ListCreateAPIView):
     permission_classes =(IsAuthenticated,)
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        try:
-            store = Store.objects.get(name=self.kwargs['storename'])
-        except Store.DoesNotExist:
-            message = 'Store does not exist'
-            return Response(message, status=status.HTTP_404_NOT_FOUND)
+        store = get_object_or_404(Store, name=self.kwargs['storename'])
         queryset = Product.objects.filter(
-            store=store
-        )
+                store=store
+                )
         return queryset
 
     def create(self, request, *args, **kwargs):
