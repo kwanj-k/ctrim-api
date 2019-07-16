@@ -90,7 +90,12 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+        instance = get_product(**kwargs)
+        if not instance:
+            message = 'Product does not exist'
+            return Response(message, status=status.HTTP_404_NOT_FOUND)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
