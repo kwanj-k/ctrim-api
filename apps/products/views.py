@@ -52,21 +52,29 @@ class ProductList(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-# class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-#     permission_classes =(IsAuthenticated,IsOwnerOrReadOnly)
-#     serializer_class = ProductSerializer
-#     lookup_field = 'slug'
+class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes =(IsAuthenticated,)
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
 
-#     def get_queryset(self):
-#         slug = self.kwargs.get('slug')
-#         if slug:
-#             queryset = Product.objects.filter(
-# 					Q(slug__icontains=slug) |
-# 					Q(slug__iexact=slug)
-# 				)
-#         else:
-#             queryset = Product.objects.all()
-#         if self.request.method == 'PUT':
-#             queryset = Product.everything.all()
-#             return queryset
-#         return queryset
+    def retrieve(self, request, *args, **kwargs):
+        storename = kwargs.get('storename', None)
+        try:
+            store = Store.objects.get(name=storename)
+        except Store.DoesNotExist:
+            message = 'Store does not exist'
+            return Response(message, status=status.HTTP_404_NOT_FOUND)
+        queryset = Product.objects.filter(
+            store=store,
+            name=kwargs['productname']
+        ).first()
+        serializer = self.serializer_class(queryset)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+    
