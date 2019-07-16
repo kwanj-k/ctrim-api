@@ -52,12 +52,7 @@ class ProductList(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes =(IsAuthenticated,)
-    serializer_class = ProductSerializer
-    queryset = Product.objects.all()
-
-    def retrieve(self, request, *args, **kwargs):
+def get_product(**kwargs):
         storename = kwargs.get('storename', None)
         try:
             store = Store.objects.get(name=storename)
@@ -68,13 +63,37 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
             store=store,
             name=kwargs['productname']
         ).first()
+        return queryset
+
+class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes =(IsAuthenticated,)
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        queryset = get_product(**kwargs)
+        if not queryset:
+            message = 'Product does not exist'
+            return Response(message, status=status.HTTP_404_NOT_FOUND)
         serializer = self.serializer_class(queryset)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = get_product(**kwargs)
+        if not instance:
+            message = 'Product does not exist'
+            return Response(message, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
 
     
