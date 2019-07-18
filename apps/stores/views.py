@@ -62,6 +62,8 @@ class UpdateDestroyStoreView(UpdateAPIView, DestroyAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class StoreAnalysis():
+    pass
 # class StaffListCreateView(ListCreateAPIView):
 #     serializer_class = StaffSerializer
 #     queryset = Staff.objects.all()

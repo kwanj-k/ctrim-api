@@ -34,8 +34,13 @@ class StockList(generics.ListCreateAPIView):
             'store': store
         }
         data = request.data
+        net = 0
+        for pk in request.data['products']:
+            product = Product.objects.get(pk=pk)
+            net += product.number_of_packages * product.package_price
+            net += product.number_of_pieces * product.piece_price
         serializer = self.serializer_class(
             data=data, context=serializer_context)
         serializer.is_valid(raise_exception=True)
-        serializer.save(store=store)
+        serializer.save(store=store, net_worth=net)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
