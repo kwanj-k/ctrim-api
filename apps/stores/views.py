@@ -1,7 +1,8 @@
 from rest_framework.generics import (
     ListCreateAPIView,
     UpdateAPIView,
-    DestroyAPIView
+    DestroyAPIView,
+    GenericAPIView
 )
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
@@ -9,8 +10,9 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import Store
-from .serializers import StoreSerializer
+from .serializers import StoreSerializer, StoreAnalysisSerializer
 from apps.helpers.store import user_stores
+from apps.stock.models import Stock
 
 
 class StoreListCreateView(ListCreateAPIView):
@@ -60,6 +62,56 @@ class UpdateDestroyStoreView(UpdateAPIView, DestroyAPIView):
             context={'request': request}
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+def get_stock(**kwargs):
+    try:
+        store = Store.objects.get(name=kwargs['storename'])
+    except Store.DoesNotExist:
+        message = 'Store does not exist'
+        return Response(message, status=status.HTTP_404_NOT_FOUND)
+    queryset = Stock.objects.filter(
+        store=store
+    )
+    return queryset
+
+class StoreAnalysis(GenericAPIView):
+    serializer_class = StoreAnalysisSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        stock = get_stock(**kwargs)
+        if len(stock) < 2:
+            message = 'Take stock atleast twice to get analysis'
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        sales = []
+        total_worth = 0
+        for s in stock:
+            k  = {
+            'month': s.period,
+            'amount': s.net_worth
+            }
+            total_worth += s.net_worth
+            sales.append(k)
+        current_sales = stock[0].net_worth - stock[1].net_worth
+        current_net = stock[0].net_worth
+        instance = {
+            'current_net': current_net,
+            'percentage_net_change': current_sales / total_worth,
+            'current_sales': current_sales,
+            'percentage_sales_change': current_sales / total_worth,
+            'current_profit': current_sales - stock[0].net_worth,
+            'percentage_profit_change': current_sales / total_worth,
+            'sales':sales
+        }
+        serializer = self.serializer_class(
+            context={'request': request},
+            instance=instance
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
+
+
 
 
 # class StaffListCreateView(ListCreateAPIView):

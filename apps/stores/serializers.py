@@ -27,6 +27,20 @@ class StoreSerializer(serializers.ModelSerializer):
         )
 
 
+class SalesSerializer(serializers.Serializer):
+    month = serializers.CharField()
+    amount = serializers.FloatField()
+
+
+class StoreAnalysisSerializer(serializers.Serializer):
+    current_net = serializers.FloatField()
+    percentage_net_change = serializers.IntegerField()
+    current_sales = serializers.FloatField()
+    percentage_sales_change = serializers.IntegerField()
+    current_profit = serializers.FloatField()
+    percentage_profit_change = serializers.IntegerField()
+    sales = SalesSerializer(many=True)
+
 # class StaffSerializer(serializers.ModelSerializer):
 #     password = serializers.CharField(max_length=128, write_only=True)
 
