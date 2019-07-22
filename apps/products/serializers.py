@@ -11,4 +11,4 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         exclude = ('deleted', 'active',)
-        read_only_fields = ('updated_at','created_at')
+        read_only_fields = ('updated_at','created_at', 'product_worth')
