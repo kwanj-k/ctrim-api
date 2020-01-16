@@ -13,6 +13,7 @@ class BaseTestCase(APITestCase):
         self.signup_data = {
                         "email": "sly@gmail.com",
                         "password": "testpassword@123",
+                        "confirm_password": "testpassword@123",
                         "username": "tester"
                         }
         self.product_data = {
