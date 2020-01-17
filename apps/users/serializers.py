@@ -64,6 +64,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
                        'a number and a special character.',
         })
     
+    
     token = serializers.SerializerMethodField()
 
     def get_token(self, obj):
