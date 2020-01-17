@@ -46,22 +46,22 @@ class StoreListCreateView(ListCreateAPIView):
 
 
 
-class UpdateDestroyStoreView(UpdateAPIView, DestroyAPIView):
-    serializer_class = StoreSerializer
-    permission_classes = (IsAuthenticated,)
-    queryset = Store.objects.all()
+# class UpdateDestroyStoreView(UpdateAPIView, DestroyAPIView):
+#     serializer_class = StoreSerializer
+#     permission_classes = (IsAuthenticated,)
+#     queryset = Store.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        try:
-            store = Store.objects.get(name=kwargs['storename'])
-        except Store.DoesNotExist:
-            message = 'Store does not exist'
-            return Response(message, status=status.HTTP_404_NOT_FOUND)
-        serializer = self.serializer_class(
-            instance=store,
-            context={'request': request}
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
+#     def get(self, request, *args, **kwargs):
+#         try:
+#             store = Store.objects.get(name=kwargs['storename'])
+#         except Store.DoesNotExist:
+#             message = 'Store does not exist'
+#             return Response(message, status=status.HTTP_404_NOT_FOUND)
+#         serializer = self.serializer_class(
+#             instance=store,
+#             context={'request': request}
+#         )
+#         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 def get_stock(**kwargs):
