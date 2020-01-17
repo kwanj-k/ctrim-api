@@ -63,11 +63,26 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'invalid': 'Password must contain at least 1 letter, '
                        'a number and a special character.',
         })
+    
     token = serializers.SerializerMethodField()
 
     def get_token(self, obj):
         token = get_jwt_token(obj)
         return token
+
+    def to_internal_value(self, data):
+        internal_value = super(RegistrationSerializer, self).to_internal_value(data)
+        confirm_password = data.get("confirm_password")
+        internal_value.update({
+            "confirm_password": confirm_password
+        })
+        return internal_value
+    
+    def validate(self, data):
+        if data.get('password') != data.get('confirm_password'):
+            raise serializers.ValidationError("Those passwords don't match.")
+        data.pop('confirm_password', None)
+        return data
 
     class Meta:
         model = User

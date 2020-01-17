@@ -21,6 +21,7 @@ class AbstractBase(models.Model):
     deleted = models.BooleanField(default=False,
                                   help_text="This is to make sure deletes are not actual deletes")
     active = models.BooleanField(default=True)
+    # everything will be used to query deleted objects e.g Model.everything.all()
     everything = models.Manager()
     objects = CustomManager()
 
