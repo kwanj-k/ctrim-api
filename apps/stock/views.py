@@ -8,13 +8,13 @@ from apps.stores.models import Store
 from rest_framework.response import Response
 from rest_framework import status
 
-class StockList(generics.ListCreateAPIView):
+class StockListCreateView(generics.ListCreateAPIView):
     permission_classes =(IsAuthenticated,)
     serializer_class = StockSerializer
 
     def get_queryset(self):
         try:
-            store = Store.objects.get(name=self.kwargs['storename'])
+            store = Store.objects.get(id=self.kwargs['store_id'])
         except Store.DoesNotExist:
             message = 'Store does not exist'
             return Response(message, status=status.HTTP_404_NOT_FOUND)
@@ -25,7 +25,7 @@ class StockList(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         try:
-            store = Store.objects.get(name=kwargs['storename'])
+            store = Store.objects.get(id=kwargs['store_id'])
         except Store.DoesNotExist:
             message = 'Store does not exist'
             return Response(message, status=status.HTTP_404_NOT_FOUND)       
@@ -34,13 +34,8 @@ class StockList(generics.ListCreateAPIView):
             'store': store
         }
         data = request.data
-        net = 0
-        for pk in request.data['products']:
-            product = Product.objects.get(pk=pk)
-            net += product.number_of_packages * product.package_price
-            net += product.number_of_pieces * product.piece_price
         serializer = self.serializer_class(
             data=data, context=serializer_context)
         serializer.is_valid(raise_exception=True)
-        serializer.save(store=store, net_worth=net)
+        serializer.save(store=store)
         return Response(serializer.data, status=status.HTTP_201_CREATED)

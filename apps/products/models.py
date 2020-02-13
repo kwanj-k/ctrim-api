@@ -1,4 +1,5 @@
 from django.db import models
+
 from apps.common.models import AbstractBase
 from apps.stores.models import Store
 
@@ -9,16 +10,15 @@ class Product(AbstractBase):
     """
     name = models.CharField(max_length=100)
     packaging = models.CharField(max_length=20)
-    package_pices = models.IntegerField()
+    package_pieces = models.IntegerField()
     number_of_packages = models.IntegerField()
     package_price = models.IntegerField()
     piece_price = models.IntegerField()
-    number_of_pieces = models.IntegerField()
-    product_worth = models.FloatField()
+    free_pieces = models.IntegerField()
     store = models.ForeignKey(
         Store,
         on_delete=models.CASCADE,
-        related_name='store')
+        related_name='products')
 
     def __str__(self):
         return self.name
