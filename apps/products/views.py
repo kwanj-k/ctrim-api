@@ -37,6 +37,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
                 stock=stock
             )
         except Product.DoesNotExist:
+            product = None
             pass
         if product:
             message = 'Product already exists'

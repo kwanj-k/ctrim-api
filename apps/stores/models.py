@@ -7,7 +7,8 @@ class Store(AbstractBase):
     name = models.CharField(
         max_length=50,
         blank=False,
-        null=False
+        null=False,
+        unique=True,
     )
     description = models.CharField(
         max_length=200,

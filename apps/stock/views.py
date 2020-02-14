@@ -36,7 +36,7 @@ class StockListCreateView(generics.ListCreateAPIView):
             store = Store.objects.get(id=kwargs['store_id'])
         except Store.DoesNotExist:
             message = 'Store does not exist'
-            return Response(message, status=status.HTTP_404_NOT_FOUND)       
+            return Response(message, status=status.HTTP_404_NOT_FOUND)     
         serializer_context = {
             'request': request,
             'store': store
