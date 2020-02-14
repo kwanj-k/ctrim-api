@@ -1,16 +1,20 @@
 from django.db import models
 from apps.common.models import AbstractBase
-from apps.products.models import Product
 from apps.stores.models import Store
 
 class Stock(AbstractBase):
-    products = models.ManyToManyField(Product, verbose_name='list of products')
-    period = models.CharField(max_length=50)
-    net_worth = models.FloatField()
+    name = models.CharField(max_length=50)
+    stock_type = models.CharField(max_length=50, default='monthly')
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True
+    )
     store = models.ForeignKey(
         Store,
         on_delete=models.CASCADE,
-        related_name='stock')
+        related_name='stocks'
+    )
         
     def __str__(self):
-        return self.period  
+        return self.name  
