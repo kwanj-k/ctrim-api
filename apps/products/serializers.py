@@ -3,12 +3,12 @@ from .models import Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    store = serializers.SerializerMethodField()
+    stock = serializers.SerializerMethodField()
 
-    def get_store(self,obj):
-        return obj.store.name
+    def get_stock(self,obj):
+        return obj.stock.name
 
     class Meta:
         model = Product
         exclude = ('deleted', 'active',)
-        read_only_fields = ('updated_at','created_at')
+        read_only_fields = ('updated_at','created_at', 'stock')

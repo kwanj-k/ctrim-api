@@ -1,6 +1,5 @@
 from django.db import models
 from apps.common.models import AbstractBase
-from apps.products.models import Product
 from apps.stores.models import Store
 
 class Stock(AbstractBase):
@@ -14,7 +13,7 @@ class Stock(AbstractBase):
     store = models.ForeignKey(
         Store,
         on_delete=models.CASCADE,
-        related_name='stock'
+        related_name='stocks'
     )
         
     def __str__(self):

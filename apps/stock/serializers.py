@@ -5,6 +5,7 @@ from apps.products.serializers import ProductSerializer
 
 class StockSerializer(serializers.ModelSerializer):
     store = serializers.SerializerMethodField()
+    value = serializers.FloatField(read_only=True)
 
     def get_store(self, obj):
         return obj.store.name
@@ -12,4 +13,4 @@ class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
         exclude = ('deleted', 'active',)
-        read_only_fields = ('updated_at','created_at')
+        read_only_fields = ('updated_at','created_at', 'id')
