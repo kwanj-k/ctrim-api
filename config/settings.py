@@ -13,13 +13,16 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import datetime
 import dj_database_url
+from decouple import config
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR2 = os.path.dirname(os.path.abspath(__file__))
 
-SECRET_KEY = os.getenv('secret_key')
-my_config = os.getenv('config')
+SECRET_KEY = config('secret_key')
+GOAUTH_API = config('GOAUTH_API')
+my_config = config('config', 'development')
 
 if my_config != 'development':
     DEBUG = False
@@ -99,7 +102,7 @@ if os.getenv('DATABASE_URL'):
     DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DATABASE_URL')
+        'NAME': config('DATABASE_URL')
         }
     }
     DATABASES['default'] = dj_database_url.config()
@@ -107,11 +110,11 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv("DB_NAME"),
-            'USER': os.getenv("DB_USER"),
-            'PASSWORD': os.getenv("DB_PASS"),
-            'HOST': os.getenv("DB_HOST"),
-            'PORT': os.getenv("DB_PORT"),
+            'NAME': config("DB_NAME"),
+            'USER': config("DB_USER"),
+            'PASSWORD': config("DB_PASS"),
+            'HOST': config("DB_HOST"),
+            'PORT': config("DB_PORT"),
         }
     }
 
@@ -123,8 +126,9 @@ REST_FRAMEWORK = {
     #     'rest_framework.permissions.IsAuthenticated',
     # ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'apps.helpers.auth.GoauthJWTAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',

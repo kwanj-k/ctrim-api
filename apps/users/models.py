@@ -3,7 +3,6 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.hashers import make_password
 
-from apps.stores.models import Store
 
 
 class MyUserManager(BaseUserManager):
@@ -40,13 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
-    store = models.ForeignKey(
-        Store,
-        on_delete=models.CASCADE,
-        related_name='users',
-        null=True,
-        blank=True
-    )
+
     objects = MyUserManager()
 
     USERNAME_FIELD = 'email'
