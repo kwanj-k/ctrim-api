@@ -31,6 +31,7 @@ class MyUserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=25, unique=True)
     email = models.EmailField(max_length=40, unique=True)
+    user_id = models.IntegerField(null=True, blank=True)
     active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     deleted = models.BooleanField(

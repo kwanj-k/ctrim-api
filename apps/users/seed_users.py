@@ -6,6 +6,8 @@ from os import getcwd
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+
 
 from apps.users.models import User
 from apps.helpers.get_data import get_users
@@ -15,6 +17,8 @@ from apps.helpers.get_response import get_seed_response
 
 class SeedUsersViewSet(ViewSet):
     """ API users class."""
+    permission_classes = (IsAuthenticated,)
+
 
     def get_users(self, request):
         """Fetch users from the Goauth API and write to a json file."""
@@ -32,6 +36,7 @@ class SeedUsersViewSet(ViewSet):
             user_info = {
                 'username': user.get('Nickname'),
                 'email': user.get('Email'),
+                'user_id': user.get('ID'),
             }
             users.append(user_info)
 

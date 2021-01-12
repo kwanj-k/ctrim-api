@@ -15,6 +15,9 @@ from apps.helpers.response_messages import auth_messages
 from apps.users.models import User
 
 
+EXEMPTED = ('/', '/api/docs/')
+
+
 
 def get_token(request):
     """Get token from cookie or header."""
@@ -52,6 +55,8 @@ class GoauthJWTAuthentication(authentication.BaseAuthentication):
 
     def authenticate(self, request):
         """Authenticate a user and return the user if authenticated."""
+        if request.path in EXEMPTED:
+            return None
         token = get_token(request)
         if not token:
             raise exceptions.AuthenticationFailed(auth_messages["token_required"],
