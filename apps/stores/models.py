@@ -1,6 +1,7 @@
 from django.db import models
 
 from apps.common.models import AbstractBase
+from apps.users.models import User
 
 
 class Store(AbstractBase):
@@ -10,10 +11,11 @@ class Store(AbstractBase):
         null=False,
         unique=True,
     )
+    owner = models.ForeignKey(
+        User, on_delete=models.DO_NOTHING,
+        related_name='stocks')
     description = models.CharField(
-        max_length=200,
-        blank=True,
-        null=True
+        max_length=200, blank=True, null=True
     )
 
     def __str__(self):

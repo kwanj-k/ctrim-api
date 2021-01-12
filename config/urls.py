@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_swagger.views import get_swagger_view
 
+from apps.api_status import ApiStatusViewSet
+
 # set the title for the API.
 schema_view = get_swagger_view(title="Ctrim API")
 
@@ -26,5 +28,6 @@ urlpatterns = [
     path('api/', include('apps.products.urls')),
     path('api/', include('apps.stores.urls')),
     path('api/', include('apps.stock.urls')),
-    path('', schema_view),
+    path('api/docs/', schema_view),
+    path('', ApiStatusViewSet.as_view({'get': 'retrieve'}), name='welcome'),
 ]
