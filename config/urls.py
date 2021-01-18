@@ -25,7 +25,6 @@ schema_view = get_swagger_view(title="Ctrim API")
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('apps.users.urls')),
-    path('api/', include('apps.products.urls')),
     path('api/', include('apps.stores.urls')),
     path('api/', include('apps.stock.urls')),
     path('api/docs/', schema_view),
