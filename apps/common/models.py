@@ -1,6 +1,21 @@
 from django.db import models
 
 
+class CapitalizeField(models.CharField):
+
+    def __init__(self, *args, **kwargs):
+        super(CapitalizeField, self).__init__(*args, **kwargs)
+
+    def pre_save(self, model_instance, add):
+        value = getattr(model_instance, self.attname, None)
+        if value:
+            value = value.capitalize()
+            setattr(model_instance, self.attname, value)
+            return value
+        else:
+            return super(CapitalizeField, self).pre_save(model_instance, add)
+
+
 class CustomManager(models.Manager):
     """
     Custom manager so as not to return deleted objects

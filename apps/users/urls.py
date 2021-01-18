@@ -3,7 +3,7 @@ from django.conf.urls import url
 
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from . import views, seed_users
+from . import seed_users
 
 
 app_name = "authentication"

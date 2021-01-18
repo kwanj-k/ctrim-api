@@ -1,7 +1,15 @@
 import os
 from django.db.models.signals import post_migrate
+from django.contrib import admin
+
 from apps.users.models import User
 
+
+class BaseAdmin(admin.ModelAdmin):
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(BaseAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['created_by'].initial = request.user
+        return form
 
 def add_initial_super_admin(sender, **kwargs):
     if User.objects.count() == 0:
