@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.renderers import (JSONRenderer)
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
+from rest_framework.permissions import IsAuthenticated
 
 from apps.helpers.get_response import get_response
 from apps.helpers.save_serializer import save_serializer
@@ -19,6 +20,7 @@ class ProductViewSet(ViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
     renderer_class = JSONRenderer
+    permission_classes = (IsAuthenticated,)
 
     def create(self, request):
         """
