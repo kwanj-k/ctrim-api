@@ -22,6 +22,7 @@ class StoreViewSet(ViewSet):
     """Store viewset."""
 
     serializer_class = StoreSerializer
+    permission_classes = (IsAuthenticated,)
     queryset = Store.objects.all()
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer, HTMLFormRenderer)
 
