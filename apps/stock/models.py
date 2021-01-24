@@ -43,7 +43,7 @@ class Stock(AbstractBase):
     )
     store = models.ForeignKey(
         Store,
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         related_name='stocks'
     )
         

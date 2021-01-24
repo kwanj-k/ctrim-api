@@ -29,7 +29,7 @@ class StockSerializer(serializers.ModelSerializer):
         """Access fields and create returned object."""
         model = Stock
         exclude = ('deleted',)
-        read_only_fields = ('updated_at','created_at', 'id')
+        read_only_fields = ('updated_at','created_at', 'id', 'ref_number', 'store',)
 
 
 class StockProductSerializer(serializers.ModelSerializer):
