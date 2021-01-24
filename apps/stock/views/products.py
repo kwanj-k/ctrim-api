@@ -45,7 +45,7 @@ class ProductViewSet(ViewSet):
 
     def retrieve(self, request, pk=None):
         """
-        Get an Product.
+        Get a Product.
         If successful, response payload with:
             - status code: 200
             - data
@@ -58,7 +58,7 @@ class ProductViewSet(ViewSet):
 
     def destroy(self, request, pk=None):
         """
-        Delete an Product.
+        Delete a Product.
         If unsuccessful, a response payload with:
             - status code: 404
         If successful, a response payload with:
