@@ -36,22 +36,16 @@ class StockViewSet(ViewSet):
            If unsuccessful, a response payload with:
                - status code: 400
         """
-        store_id = kwargs.get('store_id', None)
-        store = resource_exists(Store, int(store_id))
-        if not store:
-            response_attr = {'format_str': 'Store', 'error_key': 'not_found'}
-            data = get_response(**response_attr)
-            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
         code = generate_code()
         ref_number='STK'+str(code*9)
         serializer_context = {
             'request': request,
-            'store': store,
             'ref_number': ref_number
         }
         serializer = self.serializer_class(data=request.data, context=serializer_context)
         if serializer.is_valid():
-            serializer.save(store=store, ref_number=ref_number)
+            serializer.save(ref_number=ref_number)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         data = {
             'status': 'error'

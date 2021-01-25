@@ -29,7 +29,7 @@ packages_list = PackageViewSet.as_view({
     'post': 'create'
 })
 
-stock = StockViewSet.as_view({
+stock_detail = StockViewSet.as_view({
     'get': 'retrieve',
     'delete': 'destroy',
     'patch': 'partial_update'
@@ -37,8 +37,18 @@ stock = StockViewSet.as_view({
 
 stocks_list = StockViewSet.as_view({
     'get': 'list',
+    'post': 'create'
+
 })
-stock_create = StockViewSet.as_view({
+
+stock_product = StockProductViewSet.as_view({
+    'get': 'retrieve',
+    'delete': 'destroy',
+    'patch': 'partial_update'
+})
+
+stock_product_list = StockProductViewSet.as_view({
+    'get': 'list',
     'post': 'create'
 })
 
@@ -46,9 +56,13 @@ stock_create = StockViewSet.as_view({
 urlpatterns = format_suffix_patterns([
     url(r'^products/(?P<pk>[0-9]+)/$', products, name="product"),
     url(r'^products/$', products_list, name='products_list'),
+
     url(r'^packages/(?P<pk>[0-9]+)/$', packages, name="package"),
     url(r'^packages/$', packages_list, name='packages_list'),
+
     path('stocks/', stocks_list, name="stocks_list"),
-    url(r'^stock/(?P<store_id>[0-9]+)/$', stock_create, name="stock_create"),
-    path('stock_detail/<int:pk>/', stock, name="stock_detail"),
+    path('stocks/<int:pk>/', stock_detail, name="stock_detail"),
+    
+    path('stock_products/', stock_product_list, name="stock_product_list"),
+    path('stock_products/<int:pk>/', stock_product, name="stock_product"),
 ])

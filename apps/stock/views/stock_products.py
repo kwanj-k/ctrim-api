@@ -1,6 +1,7 @@
-"""Product endpoints."""
+"""Stock endpoints."""
+from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.renderers import (JSONRenderer)
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
@@ -9,29 +10,34 @@ from rest_framework.permissions import IsAuthenticated
 from apps.helpers.get_response import get_response
 from apps.helpers.save_serializer import save_serializer
 from apps.helpers.check_resource import check_resource, resource_exists
-from apps.stock.models import Product
-from apps.stock.serializers import ProductSerializer
+from apps.helpers.generate_code import generate_code
+from apps.stock.models import Stock, StockProduct, Product, Package
+from apps.stock.serializers import StockProductSerializer
 from apps.helpers.return_response_data import okay_response
 
 
-class ProductViewSet(ViewSet):
-    """Product viewset."""
+class StockProductViewSet(ViewSet):
+    """StockProduct viewset."""
 
-    serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    serializer_class = StockProductSerializer
+    queryset = StockProduct.objects.all()
     renderer_class = JSONRenderer
     permission_classes = (IsAuthenticated,)
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['stock__id']
+    search_fields = ['product__name',]
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         """
-           Creates a Product.
+           Creates a StockProduct.
            If successful, response payload with:
                - status code: 201
                - data
            If unsuccessful, a response payload with:
                - status code: 400
-           """
-        serializer = ProductSerializer(data=request.data)
+        """
+
+        serializer = StockProductSerializer(data=request.data)
         if serializer.is_valid():
             data = save_serializer(serializer)
             return Response(data, status=status.HTTP_201_CREATED)
@@ -43,9 +49,10 @@ class ProductViewSet(ViewSet):
         status_code = status.HTTP_400_BAD_REQUEST
         return Response(data, status=status_code)
 
+
     def retrieve(self, request, pk=None):
         """
-        Get an Product.
+        Get a StockProduct.
         If successful, response payload with:
             - status code: 200
             - data
@@ -54,32 +61,32 @@ class ProductViewSet(ViewSet):
             - status code: 404
         """
 
-        return Response(*check_resource(Product, ProductSerializer, pk, request, "Product"))
+        return Response(*check_resource(Stock, StockProductSerializer, pk, request, "StockProduct"))
 
     def destroy(self, request, pk=None):
         """
-        Delete an Product.
+        Delete a StockProduct.
         If unsuccessful, a response payload with:
             - status code: 404
         If successful, a response payload with:
             - status code: 200
-            - messsage: product deleted successful
+            - messsage: stock deleted successful
         """
-        product = resource_exists(Product, pk)
-        if not product:
-            response_attr = {'format_str': 'Product', 'error_key': 'not_found'}
+        stockp = resource_exists(StockProduct, pk)
+        if not stockp:
+            response_attr = {'format_str': 'StockProduct', 'error_key': 'not_found'}
             data = get_response(**response_attr)
             return Response(data, status=status.HTTP_404_NOT_FOUND)
-        product.delete()
+        stockp.delete()
         data = {
             'status': 'success',
-            'message': 'product deleted successfully'
+            'message': 'StockProduct deleted successfully'
             }
         return Response(data, status=status.HTTP_200_OK)
 
     def partial_update(self, request, pk=None):
         """
-        Update a product.
+        Update a StockProduct.
         If successful, response payload with:
             - status code: 200
             - data
@@ -87,26 +94,25 @@ class ProductViewSet(ViewSet):
             - status
             - error
         """
-        product = resource_exists(Product, pk)
-        if not product:
-            response_attr = {'error_key': 'not_found', 'format_str': 'Product'}
+        stockp = resource_exists(StockProduct, pk)
+        if not stockp:
+            response_attr = {'error_key': 'not_found', 'format_str': 'StockProduct'}
             data = get_response(**response_attr)
             return Response(data, status.HTTP_404_NOT_FOUND)
-        serializer = ProductSerializer(product, context={'request': request}, data=request.data, partial=True)
-
+        serializer = StockProductSerializer(stock, context={'request': request}, data=request.data, partial=True)
         if serializer.is_valid():
             data = save_serializer(serializer)
             return Response(data, status.HTTP_200_OK)
         data = {
             'status': 'error',
             'error': serializer.errors,
-            'message': 'Product failed to edit due to the above error/s'
+            'message': 'StockProduct failed to edit due to the above error/s'
         }
         return Response(data, status.HTTP_400_BAD_REQUEST)
 
     def list(self, request):
         """
-        Get all Products.
+        Get all StockProducts.
         Returns
         -------
         If successful:
@@ -118,6 +124,6 @@ class ProductViewSet(ViewSet):
             - status code: 404
         """
 
-        products = Product.objects.all()
-        serializer = ProductSerializer(products, many=True)
+        stockp = StockProduct.objects.all()
+        serializer = StockProductSerializer(stockp, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
