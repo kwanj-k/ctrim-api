@@ -20,7 +20,7 @@ class Product(AbstractBase):
     """
     Defines attributes of a product
     """
-    name = CapitalizeField(max_length=100)
+    name = CapitalizeField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
@@ -65,3 +65,6 @@ class StockProduct(AbstractBase):
 
     def __str__(self):
         return self.product.name
+    
+    class Meta:
+        unique_together = ['stock', 'product']
